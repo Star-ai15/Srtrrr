@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Star Token Presale & Opal Shop</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>Star Token Presale</h1>
+
+  <section>
+    <h2>Public Presale</h2>
+    <input id="publicAmt" type="number" step="0.01" placeholder="SOL Amount (0.01 ~ 50)"/>
+    <button onclick="buyPresale('public')">Buy</button>
+  </section>
+
+  <section>
+    <h2>VC / Angel Presale</h2>
+    <input id="vcAmt" type="number" step="0.01" placeholder="SOL Amount (1 ~ 150)"/>
+    <button onclick="buyPresale('vc')">Buy</button>
+  </section>
+
+  <section>
+    <h2>Opal Purchase</h2>
+    <button onclick="buyOpal('small')">Buy Small Opal (0.03 SOL)</button>
+    <button onclick="buyOpal('large')">Buy Large Opal (0.06 SOL)</button>
+  </section>
+
+  <p class="note">Phantom will pop up in a new tab. After payment, tokens will be auto-distributed (presale) or order will be logged (opal).</p>
+
+  <script>
+    function buyPresale(tier) {
+      const amt = parseFloat(document.getElementById(tier + 'Amt').value);
+      if (isNaN(amt)) return alert("Enter amount");
+      const cfg = tier === 'public'
+        ? {min: 0.01, max: 50, addr: 'RwtrK6knmiYeTuJgNAo85jN7DUzVpFiJPBeyV4BFeqN'}
+        : {min: 1, max: 150, addr: '8k2pViV4mKbeL5jv5QVwCr44VCtehnTzhDmtrRywjrFL'};
+      if (amt < cfg.min || amt > cfg.max) return alert("Amount must be " + cfg.min + " ~ " + cfg.max);
+      const total = (amt + 0.01).toFixed(2);
+      const url = `https://solana-pay.com/transfer?recipient=${cfg.addr}&amount=${total}&reference=${tier}Presale`;
+      window.open(url, "_blank");
+    }
+
+    function buyOpal(type) {
+      const cfg = {
+        small: {amt: 0.03, ref: 'OpalSmall'},
+        large: {amt: 0.06, ref: 'OpalLarge'}
+      }[type];
+      const addr = "FNVruuziVqeYor5xNkx2ENsndjonqiWLEMjnXUs7JuXe";
+      const url = `https://solana-pay.com/transfer?recipient=${addr}&amount=${cfg.amt}&reference=${cfg.ref}`;
+      window.open(url, "_blank");
+    }
+  </script>
+</body>
+</html>
